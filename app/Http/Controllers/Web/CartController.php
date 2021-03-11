@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Auth;
 
 class CartController extends Controller
 {
-    public function showCart(Order $order)
+    public function showCart()
     {
         $user = Auth::user();
         $carts = Cart::where('user_id', $user->id)->get();
@@ -32,7 +32,6 @@ class CartController extends Controller
 
         return view('web.cart.show-cart', [
             'carts' => $carts,
-            'order' => $order,
             'totalPrice' => $totalPrice
         ]);
     }
@@ -57,16 +56,16 @@ class CartController extends Controller
     }
 
 
-    public function update(Request $request, $id)
+    public function update(Request $request,  Cart $cart , Product $product)
     {
         $request->validate([
             'quantity' => 'required|numeric|min:1',
         ]);
 
-        $cart =  Cart::findOrFail($id);
-        $user = Auth::user();
 
-        $cart->where('user_id', $user->id)->where('product_id', $cart->product_id)->update([
+        $user = $request->user();
+
+        $cart->where('user_id', $user->id)->where('product_id', $product->id)->update([
             'quantity' => $request->quantity,
         ]);
 
@@ -74,10 +73,15 @@ class CartController extends Controller
         return redirect()->back();
     }
 
-    public function remove($id)
+    public function remove(Cart $cart , Product $product)
     {
-        $cart = Cart::findOrFail($id);
-        $cart->delete();
+
+        $user = Auth::user();
+
+        if ($user !== null) {
+            $cart->where('product_id', $product->id)->delete();
+        }
+
         return back();
     }
 

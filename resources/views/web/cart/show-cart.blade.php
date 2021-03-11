@@ -63,9 +63,9 @@
                   </td>
 
                   <td>
-                    <form action="{{ url("cart/update/{$cart->id}") }}" method="post" id="updateForm">
+                    <form action="{{ url("cart/update/{$cart->product_id}") }}" method="post" id="updateForm">
                       @csrf
-                      @method('put')
+
 
                       <div style="display: flex !important; justify-content: space-between">
                         <input type="number" min="1" name="quantity" value="{{ $cart->quantity }}" class="form-control"
@@ -92,7 +92,7 @@
                   </td>
 
                   <td>
-                    <a href="{{ url("/cart/remove/$cart->id") }}" style="margin-left: 30px !important;" type="submit"
+                    <a href="{{ url("/cart/remove/$cart->product_id") }}" style="margin-left: 30px !important;" type="submit"
                       class="btn btn-danger " id="bt">
                       <i class="fa fa-trash-o"></i>
                     </a>

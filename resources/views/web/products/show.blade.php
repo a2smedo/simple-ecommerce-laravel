@@ -24,6 +24,14 @@
             </div>
 
           @endif
+
+          @if (session('alraedy'))
+          <div class="alert alert-success" role="alert">
+            {{ session('alraedy') }}
+          </div>
+
+        @endif
+
         </div>
       </div>
 
@@ -128,9 +136,6 @@
 
             <form style="display: inline-block" action="{{ url("/wishlist/add/{$product->id}") }}" method="post">
               @csrf
-              <input type="hidden" name="user_id" />
-              <input type="hidden" name="product_id" />
-
               <button type="submit" class="btn btn-primary"><i class="fa fa-heart-o" aria-hidden="true"></i>
                 {{ __('main.add-wishlist') }}</button>
 

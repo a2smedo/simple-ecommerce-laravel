@@ -16,26 +16,8 @@ class CheckoutController extends Controller
     public function showCheckOut()
     {
         $user = Auth::user();
-        $carts = Cart::where('user_id', $user->id)->get();
-        $userTotalprices = DB::table('carts')->select(DB::raw('SUM(price * quantity) as price'))->where('user_id', $user->id)->groupBy('user_id')->first();
-
-
-        $totalPrice = 0;
-        if (!empty($userTotalprices)) {
-
-            foreach ($userTotalprices as $price) {
-
-                $totalPrice = $price;
-            }
-        }
-
-        $product = new Product();
         return view('web.checkout.checkout', [
-            'user' => $user,
-            'product' => $product,
-            'carts' => $carts,
-            'totalPrice' => $totalPrice
-
+             'user' => $user,
         ]);
     }
 

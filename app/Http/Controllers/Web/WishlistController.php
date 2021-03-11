@@ -16,48 +16,75 @@ class WishlistController extends Controller
         $user = Auth::user();
         $wishlists =  Wishlist::where('user_id', $user->id)->orderBy('id')->get();
         return view('web.wishlist.wishlist', ['wishlists' => $wishlists]);
-
     }
+
+    // public function store(Product $product, Wishlist $wishlist, Request $request)
+    // {
+    //     $user = Auth::user();
+    //     $lists = Wishlist::select('*')->where('user_id', $user->id)->where('product_id', $product->id)->get();
+
+    //     $wLists = $lists->toArray();
+
+    //     if (empty($wLists)) {
+
+    //         $wishlist->create([
+    //             'user_id' => $user->id,
+    //             'product_id' => $product->id
+    //         ]);
+    //     } else {
+    //         foreach ($wLists as $list) {
+
+    //             if ($list['product_id'] !== $product->id) {
+    //                 $wishlist->create([
+    //                     'user_id' => $user->id,
+    //                     'product_id' => $product->id
+    //                 ]);
+    //             } else {
+    //                 DB::table('wishlists')->where('user_id', '=', $user->id)->where('product_id', '=', $product->id)->update([
+    //                     'user_id' => $user->id,
+    //                     'product_id' => $product->id
+    //                 ]);
+    //             }
+    //         }
+    //     }
+
+    //     $request->session()->flash('add-wish', "This product Added in Wishlist Successfly");
+
+    //     return back();
+    // }
+
 
     public function store(Product $product, Wishlist $wishlist, Request $request)
     {
-        $user = Auth::user();
-        $lists = Wishlist::select('*')->where('user_id', $user->id)->where('product_id', $product->id)->get();
+        $userId = $request->user()->id;
 
-        $wLists = $lists->toArray();
+        $x = $wishlist->where('user_id', $userId)->where('product_id', $product->id)->get();
 
-        if (empty($wLists)) {
+        if ($userId !== null) {
 
-            $wishlist->create([
-                'user_id' => $user->id,
-                'product_id' => $product->id
-            ]);
-        } else {
-            foreach ($wLists as $list) {
+            if ($x->isEmpty()) {
 
-                if ($list['product_id'] !== $product->id) {
-                    $wishlist->create([
-                        'user_id' => $user->id,
-                        'product_id' => $product->id
-                    ]);
-                } else {
-                    DB::table('wishlists')->where('user_id', '=', $user->id)->where('product_id', '=', $product->id)->update([
-                        'user_id' => $user->id,
-                        'product_id' => $product->id
-                    ]);
-                }
+                $wishlist->create([
+                    'user_id' => $userId,
+                    'product_id' => $product->id
+                ]);
+
+                $request->session()->flash('add-wish', "This product Added in Wishlist Successfly");
+
+            } else {
+
+                $request->session()->flash('alraedy', "This product alraedy exists in your Wishlist");
             }
         }
-
-        $request->session()->flash('add-wish', "This product Added in Wishlist Successfly");
 
         return back();
     }
 
 
-    public function delete(Wishlist $wishlist)
+    public function delete(Request $request, Wishlist $wishlist, Product $product)
     {
-        $wishlist->delete();
+
+        $wishlist->where('product_id', $product->id)->delete();
         return back();
     }
 }

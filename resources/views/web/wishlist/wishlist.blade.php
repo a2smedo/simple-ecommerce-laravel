@@ -72,7 +72,7 @@
                           Sold out
                         </a>
                       @endif
-                      <form  action="{{ url("wishlist/delete/{$wishlist->id}") }} "
+                      <form  action="{{ url("wishlist/delete/{$wishlist->product->id}") }} "
                         method="post">
                         @csrf
                         <button type="submit" class="btn btn-danger" style="padding: 8px 14px !important">

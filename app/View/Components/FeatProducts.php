@@ -24,7 +24,7 @@ class FeatProducts extends Component
      */
     public function render()
     {
-        $data['fProducts'] = Product::select('*')->orderBy('id', 'DESC')->limit(5)->active()->get();
+        $data['fProducts'] = Product::select('*')->where('quantity', '>' , '0')->orderBy('id', 'DESC')->limit(5)->active()->get();
         return view('components.feat-products')->with($data);
     }
 }

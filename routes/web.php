@@ -61,9 +61,12 @@ Route::middleware('web_lang')->group(function () {
 
         //Carts
         Route::get('/cart', [CartController::class, 'showCart']);
+
         Route::post('/cart/add-cart/{product}', [CartController::class, 'addToCart']);
-         Route::put('/cart/update/{id}',  [CartController::class, 'update']);
-        Route::get('/cart/remove/{id}', [CartController::class, 'remove']);
+
+        Route::post('/cart/update/{product}',  [CartController::class, 'update']);
+
+        Route::get('/cart/remove/{product}', [CartController::class, 'remove']);
 
         // //Check out
         Route::get('/checkout', [CheckoutController::class, 'showCheckOut']);
@@ -72,7 +75,7 @@ Route::middleware('web_lang')->group(function () {
         // //Wishlist
         Route::get('/wishlist', [WishlistController::class, 'index']);
         Route::post('/wishlist/add/{product}', [WishlistController::class, 'store']);
-        Route::post('/wishlist/delete/{wishlist}', [WishlistController::class, 'delete']);
+        Route::post('/wishlist/delete/{product}', [WishlistController::class, 'delete']);
     });
 });
 
